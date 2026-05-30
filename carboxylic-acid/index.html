@@ -1,0 +1,92 @@
+<!doctype HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/mhchem.min.js"></script>
+		<title>
+			カルボン酸
+		</title>
+		<style>
+			#Q_Text {
+				font-size: 50px;
+				text-align: center;
+			}
+			#A_Text {
+				font-size: 30px;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<p id="Q_Text">
+			</p>
+			<p id="A_Text">
+			</p>
+		</div>
+		<script>
+			var QText = document.getElementById("Q_Text");
+			var AText = document.getElementById("A_Text");
+			var keyPush = false;
+			var Question	= {
+				all : [""],
+				now : [""]
+			}
+			
+			window.addEventListener("pointerdown", (event) => {N()})
+			
+			window.onkeydown = function (e) {
+				if (!keyPush) {
+					if (e.code == "Space") {
+						keyPush = true;
+						N()
+					}
+				}
+			}
+
+			window.onkeyup = function (e) {
+				if (keyPush) {
+					if (e.code == "Space") {
+						keyPush = false;
+					}
+				}
+			}
+
+			function b(str) {
+				return `\\textcolor{red}{\\ce{${str}}}`
+			}
+
+			function N() {
+				if (AText.innerHTML == "") {
+					AText.innerHTML = `\\(\\ce{${Question.now[1]}}\\)`;
+					renderMathInElement(AText)
+				} else {
+					if (Question.all[0].length == 0) {
+						Question.all = [
+              ["HCOOH","CH3COOH","C2H5COOH","C3H7COOH","C4H9COOH","C11H23COOH","C15H31COOH","C17H35COOH"],
+              ["ギ酸","酢酸","プロピオン酸","酪酸","吉草酸","ラウリン酸","パルミチン酸","ステアリン酸"]
+            ];
+					}
+						
+					var random = Math.floor(Math.random()*Question.all[0].length);
+					var random2 = Math.floor(Math.random()*2);
+          if (random2) {
+            Question.now[0] = Question.all[0][random];
+            Question.now[1] = Question.all[1][random];
+          } else {
+            Question.now[0] = Question.all[1][random];
+            Question.now[1] = Question.all[0][random];
+          }
+					Question.all[0].splice(random,1)
+					Question.all[1].splice(random,1)
+					QText.textContent = Question.now[0];
+					AText.textContent = "";
+					renderMathInElement(QText)
+				}
+			}
+		</script>
+	</body>
+</html>
